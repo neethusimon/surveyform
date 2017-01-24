@@ -1,0 +1,178 @@
+<!Doctype html>
+<head>
+<meta charset="UTF-8">
+<title> form page </title>
+<style>
+body{
+	background-color: grey;
+}
+h1{
+	color: Blue;
+	font-weight: : bold;
+	text-shadow:10px 10px 2px black;
+}
+td{
+	text-align: center
+}
+</style>
+ <script type = "text/javascript" src ="json2.js"></script>
+  <script type = "text/javascript" src ="jquery.js"></script>
+
+<script type = "text/javascript">
+var name;
+var zip;
+var req;
+var url;
+
+if(!document.cookie){
+name = window.prompt("enter your name", "Neethu");
+document.cookie = name;
+
+console.log(document.cookie);
+}
+else{
+	name = document.cookie;	
+}
+
+console.log(document.cookie);
+document.writeln("Hi, " + document.cookie) ;
+/*
+  function populatecity(){
+    zip = document.getElementById("zipcode").value;
+    url ="http://maps.googleapis.com/maps/api/geocode/json?address="+zip+"&sensor=true";
+    req = new XMLHttpRequest();
+    req.onreadystatechange = statechange;
+    req.open("GET",url,true);
+     req.send(null);
+    }
+	function statechange(){
+	zip = document.getElementById("zipcode").value;
+	if (req.status == 200){
+		if (req.readyState == 4 ){
+	      var response = req.responseText;
+		var resp = $.parseJSON(response);
+	     var citystate= resp.results[0].address_components;
+	     var city = citystate[1].long_name;
+	    // var state = citystate[4].long_name;
+	    document.getElementById("city").value =city;
+	    var s = resp.results[0].formatted_address;
+	    var ss= s.split(",");
+	       var ssp = ss[1].split(" ");
+	       var state = ssp[1];
+	       document.getElementById("state").value =state;
+	}}}
+	
+*/
+$(function(){
+$("#zipcode").blur(function(){
+	zip = $("#zipcode").val();
+	url ="http://maps.googleapis.com/maps/api/geocode/json?address="+zip+"&sensor=true";
+	$.ajax({url:url,
+		    dataTpe:"json",
+		    success:function(data){
+		    	var citystate= data.results[0].address_components;
+			     var city = citystate[1].long_name;
+			    // var state = citystate[4].long_name;
+			    document.getElementById("city").value =city;
+			    var s = data.results[0].formatted_address;
+			    var ss= s.split(",");
+			       var ssp = ss[1].split(" ");
+			       var state = ssp[1];
+			       document.getElementById("state").value =state;
+		    	
+		    }
+	});
+	
+});
+
+
+});
+
+</script>
+</head>
+<body>
+<h1 style ="text-align:center; "> Survey form</h1>
+<h3> please fill in the form</h3>
+<form method ="post" name ="surveyform">
+  <table width ="600px" border ="0" >
+
+  <tr>
+    <td> Name:</td>
+    <td><input type = "text" width ="10" maxlength ="9" id = "firstname" required /></td>
+  </tr>
+   <tr>
+      <td> zipcode:</td>
+       <!-- <td> <input type = "text" width ="10" maxlength ="5" id = "zipcode" onblur = "populatecity()"/></td>  -->
+        <td> <input type = "text" width ="10" maxlength ="5" id = "zipcode" /></td> 
+    </tr>
+     <tr>
+        <td> city:</td>
+        <td><input type = "text" width ="10" maxlength ="9" id ="city"/></td>
+     </tr>
+<tr>
+<td> state:</td>
+<td><input type = "text" width ="10" maxlength ="9" id ="state"/>
+</td>
+</tr>
+<tr>
+<td> Date:</td>
+<td><input type = "Date" width ="10" placeholder="(yyyy-mm-dd)" id = "date"/>
+</td>
+</tr>
+<tr>
+<td> telephone:</td>
+<td><input type = "tel" width ="10" placeholder="(###-###-####)" id = "date" pattern="\(\d{3}\)-\d{3}-\d{4}" />
+</td>
+</tr>
+
+<tr>
+<td> gender:</td>
+<td> 
+<label><input type = "radio"  name ="gender" value ="male" checked ="true"/>male 
+</label>
+<label><input type = "radio"  name ="gender" value ="female"/>female 
+</label>
+</td>
+</tr>
+<tr>
+<td>
+Rating:
+</td>
+<td><select name ="rating">
+<option>1</option>
+<option> 2</option>
+<option> 3</option>
+<option> 4 </option>
+<option selected ="selected">5 </option>
+</td>
+</tr>
+<tr> 
+<td>Interest:</td>
+<td colspan="3"><label><input type = "checkbox" value ="TV">TV</label>
+<label><input type = "checkbox" value ="Internet">Internet</label>
+<label><input type = "checkbox" value ="mobile">mobile</label>
+<label><input type = "checkbox" value ="facebook">facebook</label>
+<label><input type = "checkbox" value ="games">games</label>
+</tr>
+<tr>
+<td>birth month
+</td>
+<td><input type="text" name="birthmonth" list ="month">
+<datalist id ="month">
+<option value ="january">
+<option value ="feb">
+<option value ="march">
+<option value ="june">
+<option value ="july">
+</datalist>
+</td>
+</tr>
+
+</table>
+<br/>
+<input type ="submit" value ="submit" />
+<input type ="reset" value ="clear" />
+
+</form>
+</body>
+</html>
